@@ -1,5 +1,6 @@
 port: 7065
 
+http_only: true
 # Run "make generate_cert" to generate these files.
 cert_file: cert.pem
 key_file: key.pem

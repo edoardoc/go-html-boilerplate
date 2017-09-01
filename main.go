@@ -141,15 +141,6 @@ func main() {
 		logger.Error("Couldn't find config file", "err", err)
 		os.Exit(2)
 	}
-	key, err := nacl.Load(c.SecretKey)
-	if err != nil {
-		logger.Error("Error getting secret key", "err", err)
-		os.Exit(2)
-	}
-	// You can use the secret key with secretbox
-	// (godoc.org/github.com/kevinburke/nacl/secretbox/) to generate cookies and
-	// secrets. See flash.go and crypto.go for examples.
-	_ = key
 
 	if c.Port == nil {
 		port, ok := os.LookupEnv("PORT")
@@ -179,6 +170,15 @@ func main() {
 		logger.Info("Started server", "protocol", "http", "port", *c.Port)
 		http.Serve(ln, mux)
 	} else {
+		key, err := nacl.Load(c.SecretKey)
+		if err != nil {
+			logger.Error("Error getting secret key", "err", err)
+			os.Exit(2)
+		}
+		// You can use the secret key with secretbox
+		// (godoc.org/github.com/kevinburke/nacl/secretbox/) to generate cookies and
+		// secrets. See flash.go and crypto.go for examples.
+		_ = key
 		if c.CertFile == "" {
 			c.CertFile = "cert.pem"
 		}
